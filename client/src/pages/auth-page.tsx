@@ -195,7 +195,7 @@ export default function AuthPage() {
                           <FormItem>
                             <FormLabel>Display Name (Optional)</FormLabel>
                             <FormControl>
-                              <Input placeholder="What should we call you?" {...field} className="h-12 rounded-xl" />
+                              <Input placeholder="What should we call you?" {...field} value={field.value ?? ""} className="h-12 rounded-xl" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -208,7 +208,7 @@ export default function AuthPage() {
                           <FormItem>
                             <FormLabel>Email (Optional)</FormLabel>
                             <FormControl>
-                              <Input type="email" placeholder="you@example.com" {...field} className="h-12 rounded-xl" />
+                              <Input type="email" placeholder="you@example.com" {...field} value={field.value ?? ""} className="h-12 rounded-xl" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

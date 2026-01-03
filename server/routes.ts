@@ -79,14 +79,16 @@ export async function registerRoutes(
 
   // Cycles
   app.get(api.cycles.list.path, requireAuth, async (req, res) => {
-    const cycles = await storage.getCycles(req.user!.id);
+    const user = req.user as any;
+    const cycles = await storage.getCycles(user.id);
     res.json(cycles);
   });
 
   app.post(api.cycles.create.path, requireAuth, async (req, res) => {
     try {
+      const user = req.user as any;
       const input = api.cycles.create.input.parse(req.body);
-      const cycle = await storage.createCycle({ ...input, userId: req.user!.id });
+      const cycle = await storage.createCycle({ ...input, userId: user.id });
       res.status(201).json(cycle);
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -99,10 +101,11 @@ export async function registerRoutes(
 
   app.put(api.cycles.update.path, requireAuth, async (req, res) => {
     try {
+      const user = req.user as any;
       const input = api.cycles.update.input.parse(req.body);
       const id = parseInt(req.params.id);
       const existing = await storage.getCycle(id);
-      if (!existing || existing.userId !== req.user!.id) {
+      if (!existing || existing.userId !== user.id) {
         return res.status(404).json({ message: "Cycle not found" });
       }
       const updated = await storage.updateCycle(id, input);
@@ -118,14 +121,16 @@ export async function registerRoutes(
 
   // Daily Logs
   app.get(api.dailyLogs.list.path, requireAuth, async (req, res) => {
-    const logs = await storage.getDailyLogs(req.user!.id);
+    const user = req.user as any;
+    const logs = await storage.getDailyLogs(user.id);
     res.json(logs);
   });
 
   app.post(api.dailyLogs.create.path, requireAuth, async (req, res) => {
     try {
+      const user = req.user as any;
       const input = api.dailyLogs.create.input.parse(req.body);
-      const log = await storage.createDailyLog({ ...input, userId: req.user!.id });
+      const log = await storage.createDailyLog({ ...input, userId: user.id });
       res.status(201).json(log);
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -153,8 +158,9 @@ export async function registerRoutes(
 
   app.patch(api.auth.updateMode.path, requireAuth, async (req, res) => {
     try {
+      const user = req.user as any;
       const { trackingMode } = api.auth.updateMode.input.parse(req.body);
-      const updated = await storage.updateUserMode(req.user!.id, trackingMode);
+      const updated = await storage.updateUserMode(user.id, trackingMode);
       res.json({ trackingMode: updated.trackingMode });
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -168,7 +174,7 @@ export async function registerRoutes(
   // AI Chat
   app.post(api.ai.chat.path, requireAuth, async (req, res) => {
     try {
-      const { message, context } = req.body;
+      const { message, context: providedContext } = req.body;
       const user = req.user as any;
       const trackingMode = user.trackingMode || "standard";
       
@@ -184,7 +190,7 @@ export async function registerRoutes(
       ${modeContexts[trackingMode] || modeContexts.standard}
       Disclaimer: You are not a doctor and cannot provide medical diagnoses. Always advise users to consult a professional for medical issues.
       Keep responses concise and supportive.
-      User Context: ${context || "No specific health context provided."}`;
+      User Context: ${providedContext || "No specific health context provided."}`;
 
       const completion = await openai.chat.completions.create({
         model: "gpt-4o",

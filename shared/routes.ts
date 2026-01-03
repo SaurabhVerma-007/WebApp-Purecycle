@@ -45,7 +45,13 @@ export const api = {
       method: 'GET' as const,
       path: '/api/user',
       responses: {
-        200: z.object({ id: z.number(), username: z.string(), trackingMode: z.string().optional() }).nullable(),
+        200: z.object({ 
+          id: z.number(), 
+          username: z.string(), 
+          displayName: z.string().nullable(),
+          email: z.string().nullable(),
+          trackingMode: z.string().optional() 
+        }).nullable(),
       }
     },
     updateMode: {
