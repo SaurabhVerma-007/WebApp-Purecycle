@@ -14,7 +14,7 @@ interface Message {
 
 export default function ChatGuide() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Hello! I'm Luna, your personal health guide. Ask me anything about your cycle, symptoms, or general wellness. Note that I don't provide medical diagnoses." }
+    { role: 'assistant', content: "Hello! I'm your PureCycle assistant. Ask me anything about your cycle, symptoms, or general wellness. Note that I don't provide medical diagnoses." }
   ]);
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -118,7 +118,7 @@ export default function ChatGuide() {
               </Button>
            </form>
            <p className="text-xs text-center text-muted-foreground mt-3">
-              Luna is an AI assistant and not a substitute for professional medical advice.
+              PureCycle is an AI assistant and not a substitute for professional medical advice.
            </p>
         </div>
       </Card>

@@ -79,14 +79,14 @@ export default function AuthPage() {
              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold font-display text-2xl shadow-lg">
                 L
              </div>
-             <h1 className="font-display text-4xl font-bold text-gray-900">Luna</h1>
+             <h1 className="font-display text-4xl font-bold text-gray-900">PureCycle</h1>
           </div>
           
           <h2 className="text-3xl font-bold mb-4 text-gray-800">
             Understand your body, <br/> embrace your rhythm.
           </h2>
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-            Track your cycle, symptoms, and mood with privacy-first AI insights tailored just for you.
+            Track your cycle, symptoms, and mood with PureCycle's privacy-first AI insights tailored just for you.
           </p>
           
           <div className="grid grid-cols-2 gap-4">
@@ -108,7 +108,7 @@ export default function AuthPage() {
       <div className="flex items-center justify-center p-6 bg-background">
         <div className="w-full max-w-md space-y-6">
           <div className="lg:hidden text-center mb-8">
-            <h1 className="font-display text-3xl font-bold text-primary mb-2">Luna</h1>
+            <h1 className="font-display text-3xl font-bold text-primary mb-2">PureCycle</h1>
             <p className="text-muted-foreground">Your cycle, simplified.</p>
           </div>
 

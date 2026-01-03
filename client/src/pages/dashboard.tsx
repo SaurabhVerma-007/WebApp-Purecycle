@@ -115,7 +115,7 @@ export default function Dashboard() {
              </div>
              <Link href="/chat">
                 <Button variant="ghost" className="w-full justify-between group">
-                   Chat with Luna <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                   Chat with Assistant <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
              </Link>
           </CardContent>
