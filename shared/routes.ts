@@ -45,7 +45,16 @@ export const api = {
       method: 'GET' as const,
       path: '/api/user',
       responses: {
-        200: z.object({ id: z.number(), username: z.string() }).nullable(),
+        200: z.object({ id: z.number(), username: z.string(), trackingMode: z.string().optional() }).nullable(),
+      }
+    },
+    updateMode: {
+      method: 'PATCH' as const,
+      path: '/api/user/mode',
+      input: z.object({ trackingMode: z.string() }),
+      responses: {
+        200: z.object({ trackingMode: z.string() }),
+        401: z.object({ message: z.string() }),
       }
     }
   },
@@ -60,7 +69,7 @@ export const api = {
     create: {
       method: 'POST' as const,
       path: '/api/cycles',
-      input: insertCycleSchema.omit({ userId: true }), // userId comes from session
+      input: insertCycleSchema.omit({ userId: true }),
       responses: {
         201: z.custom<typeof cycles.$inferSelect>(),
         400: errorSchemas.validation,

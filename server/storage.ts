@@ -7,6 +7,7 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUserMode(userId: number, mode: string): Promise<User>;
 
   // Cycles
   getCycles(userId: number): Promise<Cycle[]>;
@@ -34,6 +35,11 @@ export class DatabaseStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  async updateUserMode(userId: number, mode: string): Promise<User> {
+    const [user] = await db.update(users).set({ trackingMode: mode }).where(eq(users.id, userId)).returning();
     return user;
   }
 

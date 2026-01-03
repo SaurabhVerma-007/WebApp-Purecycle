@@ -8,14 +8,15 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   displayName: text("display_name"),
   email: text("email"),
+  trackingMode: text("tracking_mode").default("standard"), // "standard", "fertility", "pcos", "pregnancy"
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const cycles = pgTable("cycles", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(), // Relation to users
+  userId: integer("user_id").notNull(),
   startDate: date("start_date").notNull(),
-  endDate: date("end_date"), // Nullable if current cycle
+  endDate: date("end_date"),
   notes: text("notes"),
 });
 
@@ -23,10 +24,15 @@ export const dailyLogs = pgTable("daily_logs", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull(),
   date: date("date").notNull(),
-  flowIntensity: text("flow_intensity"), // "light", "medium", "heavy", "spotting"
-  symptoms: text("symptoms").array(), // Array of symptoms
+  flowIntensity: text("flow_intensity"),
+  symptoms: text("symptoms").array(),
   mood: text("mood"),
   notes: text("notes"),
+  // Additional data for specialized modes
+  basalBodyTemp: text("basal_body_temp"), // For fertility mode
+  cervicalMucus: text("cervical_mucus"), // For fertility mode
+  pregnancyTest: text("pregnancy_test"), // "positive", "negative"
+  pcosSymptoms: text("pcos_symptoms").array(), // Specific symptoms like hair growth, acne
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -34,6 +40,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   password: true,
   displayName: true,
   email: true,
+  trackingMode: true,
 });
 
 export const insertCycleSchema = createInsertSchema(cycles).omit({ id: true });

@@ -63,6 +63,20 @@ export async function registerRoutes(
     res.status(401).json({ message: "Unauthorized" });
   };
 
+  app.patch(api.auth.updateMode.path, requireAuth, async (req, res) => {
+    try {
+      const { trackingMode } = api.auth.updateMode.input.parse(req.body);
+      const updated = await storage.updateUserMode(req.user!.id, trackingMode);
+      res.json({ trackingMode: updated.trackingMode });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        res.status(400).json({ message: err.errors[0].message });
+      } else {
+        res.status(500).json({ message: "Internal Server Error" });
+      }
+    }
+  });
+
   // Cycles
   app.get(api.cycles.list.path, requireAuth, async (req, res) => {
     const cycles = await storage.getCycles(req.user!.id);
@@ -137,16 +151,40 @@ export async function registerRoutes(
     }
   });
 
+  app.patch(api.auth.updateMode.path, requireAuth, async (req, res) => {
+    try {
+      const { trackingMode } = api.auth.updateMode.input.parse(req.body);
+      const updated = await storage.updateUserMode(req.user!.id, trackingMode);
+      res.json({ trackingMode: updated.trackingMode });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        res.status(400).json({ message: err.errors[0].message });
+      } else {
+        res.status(500).json({ message: "Internal Server Error" });
+      }
+    }
+  });
+
   // AI Chat
   app.post(api.ai.chat.path, requireAuth, async (req, res) => {
     try {
       const { message, context } = req.body;
+      const user = req.user as any;
+      const trackingMode = user.trackingMode || "standard";
       
-      const systemPrompt = `You are a helpful, empathetic menstrual health assistant. 
-      You help women track their cycles and understand their symptoms. 
+      const modeContexts: Record<string, string> = {
+        standard: "Focus on general cycle tracking and symptom management.",
+        fertility: "Focus on identifying fertile windows, ovulation signs (BBT, cervical mucus), and optimizing conception chances.",
+        pcos: "Focus on managing PCOS symptoms (irregular cycles, acne, hirsutism), hormonal balance, and lifestyle tracking.",
+        pregnancy: "Focus on fetal development milestones, pregnancy symptoms, prenatal health, and preparing for birth."
+      };
+
+      const systemPrompt = `You are a helpful, empathetic menstrual and reproductive health assistant. 
+      You help users track their health according to their current mode: ${trackingMode.toUpperCase()}.
+      ${modeContexts[trackingMode] || modeContexts.standard}
       Disclaimer: You are not a doctor and cannot provide medical diagnoses. Always advise users to consult a professional for medical issues.
       Keep responses concise and supportive.
-      User Context: ${context || "No specific cycle context provided."}`;
+      User Context: ${context || "No specific health context provided."}`;
 
       const completion = await openai.chat.completions.create({
         model: "gpt-4o",
