@@ -25,7 +25,7 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="relative rounded-xl overflow-hidden"
+      className="relative rounded-xl overflow-hidden hover:bg-accent"
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.div

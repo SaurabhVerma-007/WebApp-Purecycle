@@ -140,7 +140,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
-        <header className="hidden md:flex items-center justify-end p-4 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-20 h-16">
+        <header className="hidden md:flex items-center justify-end p-4 border-b border-border bg-card sticky top-0 z-20 h-16">
           <ThemeToggle />
         </header>
         <main className="flex-1 overflow-auto p-4 md:p-8 max-w-7xl mx-auto w-full">
