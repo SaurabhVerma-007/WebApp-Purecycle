@@ -149,7 +149,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
       </div>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-border flex justify-around p-2 pb-safe shadow-lg z-20">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border flex justify-around p-2 pb-safe shadow-lg z-20">
         {navItems.slice(0, 4).map((item) => (
           <Link key={item.href} href={item.href}>
             <div className={`flex flex-col items-center p-2 rounded-lg cursor-pointer ${
