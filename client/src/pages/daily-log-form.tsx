@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { useCreateDailyLog, useUpdateDailyLog, useDailyLogs } from "@/hooks/use-daily-logs";
 import { insertDailyLogSchema } from "@shared/schema";
 import { Button } from "@/components/ui/button";
+import { queryClient } from "@/lib/queryClient";
 import {
   Form,
   FormControl,
@@ -78,11 +79,17 @@ export default function DailyLogForm() {
 
     if (existingLog) {
       updateLog.mutate({ id: existingLog.id, ...submissionData }, {
-        onSuccess: () => setLocation("/dashboard")
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["/api/daily-logs"] });
+          setLocation("/");
+        }
       });
     } else {
       createLog.mutate(submissionData, {
-        onSuccess: () => setLocation("/dashboard")
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["/api/daily-logs"] });
+          setLocation("/");
+        }
       });
     }
   };
