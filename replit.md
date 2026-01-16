@@ -1,15 +1,10 @@
-# Luna - Menstrual Cycle Tracking Application
+# PureCycle - Menstrual Cycle Tracking Application
 
 ## Overview
 
-Luna is a privacy-focused web application designed to help women track their menstrual cycles, predict upcoming periods, and receive AI-driven health insights. The application targets women aged 13-45 seeking period tracking, symptom analysis, and personalized wellness guidance.
+PureCycle is a privacy-focused web application designed to help women track their menstrual cycles, predict upcoming periods, and receive AI-driven health insights. The application provides cycle tracking, daily symptom logging, calendar visualization with color-coded cycle phases, and an AI-powered health guide chatbot.
 
-Core functionality includes:
-- Menstrual cycle tracking with period start/end dates and flow intensity
-- Daily symptom and mood logging
-- AI-powered chatbot for menstrual health questions (non-diagnostic)
-- Calendar visualization with color-coded cycle phases
-- Cycle prediction based on historical data
+Target users are women aged 13-45 seeking period tracking, symptom analysis, and personalized wellness guidance.
 
 ## User Preferences
 
@@ -18,58 +13,66 @@ Preferred communication style: Simple, everyday language.
 ## System Architecture
 
 ### Frontend Architecture
-- **Framework**: React with TypeScript, using Vite as the build tool
-- **Routing**: Wouter for lightweight client-side routing
-- **State Management**: TanStack React Query for server state and data fetching
-- **UI Components**: Shadcn/ui component library built on Radix UI primitives
-- **Styling**: Tailwind CSS with custom feminine color palette (soft pinks, purples, sage greens)
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and optimized production builds
+- **Routing**: Wouter (lightweight React router)
+- **State Management**: TanStack React Query for server state and caching
+- **UI Components**: Shadcn UI component library built on Radix UI primitives
+- **Styling**: Tailwind CSS with custom CSS variables for theming (soft pinks/purples palette)
 - **Forms**: React Hook Form with Zod validation
-- **Calendar**: react-day-picker for cycle tracking calendar
+- **Calendar**: react-day-picker for cycle visualization
+- **Date Utilities**: date-fns for date manipulation
+
+The frontend follows a pages-based structure in `client/src/pages/` with shared components in `client/src/components/`. Custom hooks in `client/src/hooks/` encapsulate data fetching logic using React Query.
 
 ### Backend Architecture
-- **Runtime**: Node.js with Express.js
-- **Language**: TypeScript with ESM modules
-- **API Design**: RESTful endpoints defined in shared route schemas with Zod validation
-- **Authentication**: Passport.js with local strategy, session-based auth using express-session
-- **Password Security**: Scrypt hashing with random salts
+- **Runtime**: Node.js with Express
+- **Language**: TypeScript with ES modules
+- **Authentication**: Passport.js with local strategy (username/password)
+- **Session Management**: Express sessions with scrypt password hashing
+- **API Design**: RESTful endpoints defined in `shared/routes.ts` with Zod schemas for type-safe validation
 
-### Data Layer
-- **ORM**: Drizzle ORM with PostgreSQL dialect
-- **Schema Location**: `shared/schema.ts` contains all database table definitions
-- **Migrations**: Drizzle Kit for schema migrations (`db:push` command)
-- **Tables**: users, cycles, dailyLogs, conversations, messages
+The server handles authentication, cycle/log CRUD operations, and AI chat interactions. Routes are registered in `server/routes.ts` with storage abstraction in `server/storage.ts`.
 
-### Shared Code Pattern
-The `shared/` directory contains code used by both frontend and backend:
-- `schema.ts`: Database schema and Zod insert schemas
-- `routes.ts`: API route definitions with input/output schemas
-- This enables type-safe API contracts between client and server
+### Data Storage
+- **Database**: PostgreSQL
+- **ORM**: Drizzle ORM with drizzle-zod for schema-to-validation integration
+- **Schema Location**: `shared/schema.ts` defines users, cycles, and dailyLogs tables
+- **Migrations**: Managed via drizzle-kit (`npm run db:push`)
+
+Key tables:
+- `users`: Authentication and profile data with tracking mode preference
+- `cycles`: Period start/end dates per user
+- `dailyLogs`: Daily symptoms, mood, flow intensity, and specialized mode data (fertility, PCOS)
+
+### Authentication Flow
+- Session-based authentication using express-session
+- Passport local strategy validates username/password
+- Protected routes check session on the server; frontend redirects unauthenticated users to `/auth`
 
 ### AI Integration
-- **Provider**: OpenAI API via Replit AI Integrations
-- **Features**: Chat assistant for health questions, configured through environment variables
-- **Modules**: Located in `server/replit_integrations/` with chat, image, and batch processing capabilities
-
-### Build System
-- **Development**: Vite dev server with HMR, proxied through Express
-- **Production**: Vite builds client to `dist/public`, esbuild bundles server to `dist/index.cjs`
-- **Path Aliases**: `@/` maps to client source, `@shared/` maps to shared code
+- Uses OpenAI API via Replit AI Integrations
+- Configured through environment variables: `AI_INTEGRATIONS_OPENAI_API_KEY` and `AI_INTEGRATIONS_OPENAI_BASE_URL`
+- Chat endpoint at `POST /api/ai/chat` provides personalized health guidance
+- Additional replit_integrations modules available for batch processing, image generation, and conversation storage
 
 ## External Dependencies
 
 ### Database
 - **PostgreSQL**: Primary database, connection via `DATABASE_URL` environment variable
-- **connect-pg-simple**: Session store for persistent sessions
+- **connect-pg-simple**: Session store for PostgreSQL
 
-### AI Services
-- **OpenAI API**: Accessed through Replit AI Integrations
-- **Environment Variables**: `AI_INTEGRATIONS_OPENAI_API_KEY`, `AI_INTEGRATIONS_OPENAI_BASE_URL`
+### AI/ML Services
+- **OpenAI API**: Powers the AI health guide chatbot via Replit AI Integrations
+- Environment variables: `AI_INTEGRATIONS_OPENAI_API_KEY`, `AI_INTEGRATIONS_OPENAI_BASE_URL`
 
 ### Authentication
-- **Session Secret**: `SESSION_SECRET` environment variable (falls back to default in development)
+- **SESSION_SECRET**: Required environment variable for session encryption
 
-### Key NPM Packages
-- **UI**: Full Radix UI component suite, Lucide icons, class-variance-authority
-- **Data**: date-fns for date manipulation, recharts for visualization
-- **Validation**: Zod throughout for runtime type checking
-- **Build**: esbuild for server bundling, Vite for client
+### Key npm Packages
+- **drizzle-orm/drizzle-kit**: Database ORM and migration tooling
+- **@tanstack/react-query**: Async state management
+- **react-day-picker**: Calendar component for cycle visualization
+- **date-fns**: Date manipulation library
+- **zod**: Runtime type validation shared between client and server
+- **Radix UI**: Accessible component primitives (via Shadcn UI)
