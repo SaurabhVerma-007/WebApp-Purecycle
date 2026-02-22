@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { LogOut, User, Bell, Shield, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
 
 export default function SettingsPage() {
   const { data: user } = useUser();
   const { mutate: logout } = useLogout();
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -66,22 +68,24 @@ export default function SettingsPage() {
       </Card>
       
       <Card>
-         <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-               <Moon className="w-5 h-5 text-primary" /> Appearance
-            </CardTitle>
-         </CardHeader>
-         <CardContent>
-             <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                 <Label>Dark Mode</Label>
-                 <p className="text-sm text-muted-foreground">Easier on the eyes at night.</p>
-              </div>
-              <Switch disabled checked={false} />
-           </div>
-         </CardContent>
-      </Card>
-
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2">
+      <Moon className="w-5 h-5 text-primary" /> Appearance
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="flex items-center justify-between">
+      <div className="space-y-0.5">
+        <Label>Dark Mode</Label>
+        <p className="text-sm text-muted-foreground">Easier on the eyes at night.</p>
+      </div>
+      <Switch
+        checked={theme === "dark"}
+        onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+      />
+    </div>
+  </CardContent>
+</Card>
       <Card>
          <CardHeader>
             <CardTitle className="flex items-center gap-2">

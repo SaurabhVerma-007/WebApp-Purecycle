@@ -49,6 +49,32 @@
   
   --radius: 1rem;
 }
+.dark {
+  --background: 335 20% 10%;
+  --foreground: 330 20% 90%;
+
+  --primary: 335 60% 65%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 270 20% 20%;
+  --secondary-foreground: 270 20% 85%;
+
+  --muted: 335 15% 18%;
+  --muted-foreground: 330 10% 60%;
+
+  --accent: 140 20% 20%;
+  --accent-foreground: 140 25% 75%;
+
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 335 15% 22%;
+  --input: 335 15% 22%;
+  --ring: 335 60% 65%;
+
+  --card: 335 20% 13%;
+  --card-foreground: 330 20% 90%;
+}
 
 @layer base {
   body {
@@ -58,7 +84,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    @apply tracking-tight font-semibold text-gray-900;
+    @apply tracking-tight font-semibold text-gray-900 dark:text-gray-100;
   }
 }
 
@@ -78,9 +104,11 @@
 
 .rdp-day_today {
   font-weight: bold;
-  color: hsl(var(--primary));
+  color: hsl(var(--primary)) !important;
+  border: 2px solid hsl(var(--primary)) !important;
+  border-radius: 50% !important;
+  background-color: hsl(var(--primary) / 0.1) !important;
 }
-
 /* Glassmorphism utilities */
 .glass-panel {
   @apply bg-white/70 backdrop-blur-md border border-white/50 shadow-sm;
