@@ -77,7 +77,7 @@ export default function AuthPage() {
            /> */}
           <div className="mb-8 flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold font-display text-2xl shadow-lg">
-              L
+              P
             </div>
             <h1 className="font-display text-4xl font-bold text-gray-900">PureCycle</h1>
           </div>
