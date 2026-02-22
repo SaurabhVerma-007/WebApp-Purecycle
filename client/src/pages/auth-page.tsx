@@ -67,28 +67,28 @@ export default function AuthPage() {
       <div className="hidden lg:flex flex-col justify-center p-12 bg-primary/5 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/30 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
-        
+
         <div className="relative z-10 max-w-md mx-auto">
-           {/* Unsplash image: Woman relaxing with tea and book */}
-           {/* <img 
+          {/* Unsplash image: Woman relaxing with tea and book */}
+          {/* <img 
              src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80" 
              alt="Relaxing woman" 
              className="rounded-2xl shadow-2xl mb-8 object-cover w-full h-64"
            /> */}
           <div className="mb-8 flex items-center gap-3">
-             <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold font-display text-2xl shadow-lg">
-                L
-             </div>
-             <h1 className="font-display text-4xl font-bold text-gray-900">PureCycle</h1>
+            <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold font-display text-2xl shadow-lg">
+              L
+            </div>
+            <h1 className="font-display text-4xl font-bold text-gray-900">PureCycle</h1>
           </div>
-          
+
           <h2 className="text-3xl font-bold mb-4 text-gray-800">
-            Understand your body, <br/> embrace your rhythm.
+            Understand your body, <br /> embrace your rhythm.
           </h2>
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">
             Track your cycle, symptoms, and mood with PureCycle's privacy-first AI insights tailored just for you.
           </p>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white/60 backdrop-blur-sm p-4 rounded-xl border border-white/50">
               <Sparkles className="w-6 h-6 text-primary mb-2" />
@@ -115,7 +115,13 @@ export default function AuthPage() {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-8 h-12">
               <TabsTrigger value="login" className="text-base">Login</TabsTrigger>
-              <TabsTrigger value="register" className="text-base">Sign Up</TabsTrigger>
+              <TabsTrigger
+                value="register"
+                className="text-base"
+                onClick={() => loginMutation.reset()}
+              >
+                Sign Up
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="login">
@@ -153,13 +159,25 @@ export default function AuthPage() {
                           </FormItem>
                         )}
                       />
-                      <Button 
-                        type="submit" 
+                      <Button
+                        type="submit"
                         className="w-full h-12 rounded-xl text-lg font-medium shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all"
                         disabled={loginMutation.isPending}
                       >
                         {loginMutation.isPending ? <Loader2 className="animate-spin mr-2" /> : "Sign In"}
                       </Button>
+                      {loginMutation.isError && (
+                        <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-3 rounded-xl text-center">
+                          Account not found or incorrect password.{" "}
+                          <button
+                            type="button"
+                            className="underline font-semibold hover:opacity-80"
+                            onClick={() => setActiveTab("register")}
+                          >
+                            Create an account instead?
+                          </button>
+                        </div>
+                      )}
                     </form>
                   </Form>
                 </CardContent>
@@ -201,7 +219,7 @@ export default function AuthPage() {
                           </FormItem>
                         )}
                       />
-                       <FormField
+                      <FormField
                         control={registerForm.control}
                         name="email"
                         render={({ field }) => (
@@ -227,8 +245,8 @@ export default function AuthPage() {
                           </FormItem>
                         )}
                       />
-                      <Button 
-                        type="submit" 
+                      <Button
+                        type="submit"
                         className="w-full h-12 rounded-xl text-lg font-medium shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all"
                         disabled={registerMutation.isPending}
                       >
