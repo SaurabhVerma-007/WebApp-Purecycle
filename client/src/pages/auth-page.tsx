@@ -200,7 +200,15 @@ export default function AuthPage() {
                           <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                              <Input placeholder="Choose a username" {...field} className="h-12 rounded-xl" />
+                              <Input
+                                placeholder="Choose a username"
+                                {...field}
+                                className="h-12 rounded-xl"
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                  registerMutation.reset(); // clears error when user types
+                                }}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -252,6 +260,15 @@ export default function AuthPage() {
                       >
                         {registerMutation.isPending ? <Loader2 className="animate-spin mr-2" /> : "Create Account"}
                       </Button>
+
+                      {registerMutation.isError && (
+                        <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-3 rounded-xl text-center">
+                          {(registerMutation.error as Error)?.message?.includes("already exists")
+                            ? "This username is already taken. Please choose a different one."
+                            : "Something went wrong. Please try again."
+                          }
+                        </div>
+                      )}
                     </form>
                   </Form>
                 </CardContent>
